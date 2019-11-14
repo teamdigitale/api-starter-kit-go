@@ -5,6 +5,13 @@
 #   potrai integrarla facilmente in Developers Italia.
 #
 x-commons:
+  cors-headers: &cors-headers
+    Access-Control-Allow-Origin:
+      schema:
+        type: string
+    Access-Control-Allow-Methods:
+      schema:
+        type: string
   ratelimit-headers: &ratelimit-headers
     X-RateLimit-Limit:
       $ref: '#/components/headers/X-RateLimit-Limit'
@@ -99,6 +106,16 @@ servers:
 #
 paths:
   /echo:
+    options:
+      summary: Url per pre-flight cors request 
+      operationId: options_echo
+      tags:
+        - public
+      responses:
+        '200':
+          description: preflight request with cors response headers.
+          headers:
+            <<: *cors-headers
     get:
       summary: Ritorna un timestamp in formato RFC5424.
       description: |

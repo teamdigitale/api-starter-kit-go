@@ -57,6 +57,8 @@ run-chi: clean chi-gen go-build
 test: go-build
 	cd generated/github.com/ioggstream/simple && go test
 
-
 clean:
 	rm -rf generated
+
+reformat:
+	find . -name *.go -exec gofmt -w {} \;

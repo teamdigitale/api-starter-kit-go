@@ -9,7 +9,11 @@ Questo repository contiene il template di un'API interoperabile scritta in Go.
 
 ## Contenuto
 
-- Un progetto di esempio in Go basato su https://github.com/labstack/echo
+- Due progetti di esempio in Go:
+
+  * in `go-echo` basato su https://github.com/labstack/echo
+  * in `go-chi` basato su https://github.com/go-chi/chi
+
 - Una directory `openapi` con le specifiche
 
 ## Istruzioni
@@ -51,11 +55,13 @@ per comodità tramite il comando:
 
 Il `Makefile` contiene:
 
-  - un esempio di code generation via openapi v3. Basta
-    lanciare:
+  - un esempio di code generation con `echo framework` eseguibile con:
 
-        make run
+        make clean run
 
+  - un esempio di code generation con `echo framework` eseguibile con:
+
+        make clean run-chi
 
 
 ### Dipendenze
