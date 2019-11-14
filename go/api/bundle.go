@@ -65,3 +65,46 @@ func (app *MyApplication) GetStatus(ctx echo.Context) error {
 
 	return ctx.JSON(http.StatusServiceUnavailable, result)
 }
+
+func CORSFilter(next echo.HandlerFunc) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		c.Response().Header().Set("Access-Control-Allow-Origin", "*")
+		c.Response().Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		return next(c)
+	}
+}
+
+func ProblemErrorHandler(err error, c echo.Context) {
+	c.Logger().Error(err)
+	
+	httpError, ok := err.(*echo.HTTPError)
+	fmt.Println("problemErrorHandler: ", err, ok, httpError)
+	if !ok {
+		return
+	}
+
+	var problem Problem
+	problem.Status = int32(httpError.Code)
+	problem.Title, ok = httpError.Message.(string)
+	if !ok {
+		c.Logger().Error("Message is not a string", httpError)
+		return
+	} 
+
+	if httpError.Message == "Path was not found" {
+		problem.Status = 404
+	}
+	
+	if !c.Response().Committed {
+		if c.Request().Method == http.MethodHead { // Issue #608
+			err = c.NoContent(httpError.Code)
+		} else {
+			c.Response().Header().Set("Content-Type", "application/problem+json")
+			err = c.JSON(int(problem.Status), problem)
+		}
+		if err != nil {
+			c.Logger().Error(err)
+		}
+	}
+
+}
