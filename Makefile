@@ -4,7 +4,8 @@
 YAML=$(shell find * -name \*yaml)
 YAMLSRC=$(shell find openapi -name \*yaml.src)
 YAMLGEN=$(patsubst %.yaml.src,%.yaml,$(YAMLSRC))
-GOGEN=generated/github.com/ioggstream/simple/api/api-types.gen.go generated/github.com/ioggstream/simple/api/api-server.gen.go
+ECHO_GEN=generated/github.com/ioggstream/simple/api/api-types.gen.go generated/github.com/ioggstream/simple/api/api-server.gen.go
+CHI_GEN=generated/github.com/ioggstream/simple/api/api-types.gen.go generated/github.com/ioggstream/simple/api/api-server-chi.gen.go
 
 yaml: $(YAMLGEN)
 
@@ -24,21 +25,38 @@ yamllint: $(YAML)
 %-server.gen.go: openapi/simple.yaml
 	oapi-codegen  -package api --generate server,spec -o $@ $<
 
+%-server-chi.gen.go: openapi/simple.yaml
+	oapi-codegen  -package api --generate chi-server,spec -o $@ $<
 
-go-prepare:
+
+prepare-echo:
 	mkdir -p  generated/github.com/ioggstream/simple
-	cp -rp go/* generated/github.com/ioggstream/simple
+	cp -rp go-echo/* generated/github.com/ioggstream/simple
 
-go-build: go-prepare $(GOGEN)
+prepare-chi:
+	mkdir -p  generated/github.com/ioggstream/simple
+	cp -rp go-chi/* generated/github.com/ioggstream/simple
+
+echo-gen: prepare-echo $(ECHO_GEN)
+
+chi-gen: prepare-chi $(CHI_GEN)
+
+go-build:
 	cd generated/github.com/ioggstream/simple
 	go mod init github.com/ioggstream/simple
 	go build
 
-run: go-build
+
+run: echo-gen go-build
 	cd generated/github.com/ioggstream/simple && go run main.go
+
+run-chi: clean chi-gen go-build
+	cd generated/github.com/ioggstream/simple && go run main.go
+
 
 test: go-build
 	cd generated/github.com/ioggstream/simple && go test
+
 
 clean:
 	rm -rf generated
