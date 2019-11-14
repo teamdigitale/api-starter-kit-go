@@ -37,5 +37,8 @@ go-build: go-prepare $(GOGEN)
 run: go-build
 	cd generated/github.com/ioggstream/simple && go run main.go
 
+test: go-build
+	cd generated/github.com/ioggstream/simple && go test
+
 clean:
 	rm -rf generated

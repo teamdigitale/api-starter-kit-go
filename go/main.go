@@ -18,6 +18,7 @@ import (
 
 )
 
+
 func main() {
 	var port = flag.Int("port", 8080, "Port for test HTTP server")
 	flag.Parse()
@@ -39,6 +40,11 @@ func main() {
 	e := echo.New()
 	// Log all requests
 	e.Use(echomiddleware.Logger())
+
+	// Add middleware filters and customize error handler
+	e.Use(api.CORSFilter)
+	e.HTTPErrorHandler = api.ProblemErrorHandler
+
 	// Use our validation middleware to check all requests against the
 	// OpenAPI schema.
 	e.Use(middleware.OapiRequestValidator(swagger))
