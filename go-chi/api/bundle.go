@@ -2,31 +2,58 @@ package api
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
-	"math/rand"
-	"net/http"
-	"time"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
-
+	"math/rand"
+	"net/http"
+	"os"
+	"time"
 )
 
 type Filter = func(http.Handler) http.Handler
 
+var CORSFilterz = cors.New(cors.Options{
+	AllowedOrigins:     []string{"*"},
+	AllowedMethods:     []string{"GET", "POST", "OPTIONS"},
+	AllowedHeaders:     []string{"Accept", "Content-Type"},
+	AllowCredentials:   true,
+	OptionsPassthrough: true, // process requests when defined
+}).Handler
+
+func Recovery(next http.Handler) http.Handler {
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			if rvr := recover(); rvr != nil {
+				detail, _ := json.Marshal(rvr)
+				problem, err := json.Marshal(Problem{
+					Title:  http.StatusText(http.StatusInternalServerError),
+					Status: int32(http.StatusInternalServerError),
+					Detail: detail,
+				})
+				if err != nil {
+					fmt.Fprintf(os.Stderr, "Panic: %+v %s\n", rvr, err)
+				}
+				fmt.Fprintf(os.Stderr, "Panic: %+v\n", rvr)
+
+				http.Error(w, string(problem), http.StatusInternalServerError)
+			}
+		}()
+
+		next.ServeHTTP(w, r)
+	}
+
+	return http.HandlerFunc(fn)
+}
 
 // Handler creates http.Handler with routing matching OpenAPI spec.
-func HandlerCustom(si ServerInterface, middlewares []Filter ) http.Handler {
+func HandlerCustom(si ServerInterface) http.Handler {
 	r := chi.NewRouter()
+	r.Use(Recovery)
 
-	cors := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "OPTIONS"},
-		AllowedHeaders:   []string{"Accept", "Content-Type"},
-		AllowCredentials: true,	
-	})
-	fmt.Println(cors)
-	// r.Use(cors.Handler)
-	
+	r.Use(CORSFilterz)
+
 	r.Group(func(r chi.Router) {
 		r.Use(GetEchoCtx)
 		r.Get("/echo", si.GetEcho)
@@ -72,7 +99,7 @@ func CreateApplication() *MyApplication {
 func CORSFilter() *cors.Cors {
 	return cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"},
 	})
 }
 
@@ -113,6 +140,7 @@ func (app *MyApplication) GetStatus(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(result)
 		return
 	}
+	panic(errors.New("antani"))
 	var result = Problem{
 		Status: int32(503),
 		Title:  "ko",

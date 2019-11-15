@@ -16,10 +16,9 @@ func main() {
 	// Create an instance of our handler which satisfies the generated interface
 	petStore := api.CreateApplication()
 
-	
 	// We now register our petStore above as the handler for the interface
-	h := api.HandlerCustom(petStore, []api.Filter{api.CORSFilter().Handler,})
-	
+	h := api.HandlerCustom(petStore)
+
 	s := &http.Server{
 		Handler: h,
 		Addr:    fmt.Sprintf("0.0.0.0:%d", *port),

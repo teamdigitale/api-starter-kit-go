@@ -46,16 +46,23 @@ go-build:
 	go mod init github.com/ioggstream/simple
 	go build
 
+build-chi: clean chi-gen go-build
 
-run: echo-gen go-build
+build-echo: clean echo-gen go-build
+
+run-echo: build-echo
 	cd generated/github.com/ioggstream/simple && go run main.go
 
-run-chi: clean chi-gen go-build
+run-chi: build-chi
 	cd generated/github.com/ioggstream/simple && go run main.go
+	
 
-
-test: go-build
+test: build-echo
 	cd generated/github.com/ioggstream/simple && go test
+
+test-chi: build-chi
+	cd generated/github.com/ioggstream/simple && go test
+
 
 clean:
 	rm -rf generated
