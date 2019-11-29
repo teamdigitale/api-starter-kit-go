@@ -2,13 +2,12 @@ package api
 
 import (
 	"fmt"
+	"math/rand"
 	"net/http"
 	"time"
-	"math/rand"
 
 	"github.com/labstack/echo/v4"
 )
-
 
 // This function wraps sending of an error in the Error format, and
 // handling the failure to marshal that.
@@ -26,21 +25,20 @@ type MyApplication struct {
 }
 
 func CreateApplication() *MyApplication {
-    return &MyApplication{
+	return &MyApplication{
 		r: rand.New(rand.NewSource(99)),
-    }
+	}
 }
 
 //
 // Implement the methods declared in the generated interface.
 //
 
-
 func (app *MyApplication) GetEcho(ctx echo.Context) error {
 
-    var ts = time.Now()
+	var ts = time.Now()
 	result := Timestamps{
-	    Ts: ts,
+		Ts: ts,
 	}
 	return ctx.JSON(http.StatusOK, result)
 }
@@ -49,18 +47,18 @@ func (app *MyApplication) GetStatus(ctx echo.Context) error {
 
 	ctx.Response().Header().Set("Cache-Control", "no-store")
 
-    var f = app.r.Int() % 5
+	var f = app.r.Int() % 5
 	fmt.Println("string %d", f)
-    if (f < 3) {
-        var result = Problem {
-            Status: int32(200),
-            Title: "ok",
-        }
-        return ctx.JSON(http.StatusOK, result)
+	if f < 3 {
+		var result = Problem{
+			Status: int32(200),
+			Title:  "ok",
+		}
+		return ctx.JSON(http.StatusOK, result)
 	}
-	var result = Problem {
+	var result = Problem{
 		Status: int32(503),
-		Title: "ko",
+		Title:  "ko",
 	}
 
 	return ctx.JSON(http.StatusServiceUnavailable, result)
@@ -76,7 +74,7 @@ func CORSFilter(next echo.HandlerFunc) echo.HandlerFunc {
 
 func ProblemErrorHandler(err error, c echo.Context) {
 	c.Logger().Error(err)
-	
+
 	httpError, ok := err.(*echo.HTTPError)
 	fmt.Println("problemErrorHandler: ", err, ok, httpError)
 	if !ok {
@@ -89,12 +87,12 @@ func ProblemErrorHandler(err error, c echo.Context) {
 	if !ok {
 		c.Logger().Error("Message is not a string", httpError)
 		return
-	} 
+	}
 
 	if httpError.Message == "Path was not found" {
 		problem.Status = 404
 	}
-	
+
 	if !c.Response().Committed {
 		if c.Request().Method == http.MethodHead { // Issue #608
 			err = c.NoContent(httpError.Code)

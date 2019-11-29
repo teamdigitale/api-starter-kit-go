@@ -16,11 +16,8 @@ anchors:
 version: 2
 jobs:
   build: &base
-    # Build in the primary docker container
-    #  and connecting to the baikal server provided
-    #  by the second container.
     docker:
-      - image: circleci/openjdk:8-jdk-browsers
+      - image: circleci/golang:1.12
     working_directory: /tmp/code
     steps:
     - checkout
@@ -29,43 +26,10 @@ jobs:
 
     - run: make yaml
 
-    - run: |
-        make python-flask-generate
-    - persist_to_workspace:
-        root: /tmp/code/
-        paths:
-        - python-flask
-
-  test:
-    docker:
-    - image: python:3.6
-    steps:
-    - checkout
+    - run: go get -u github.com/deepmap/oapi-codegen/cmd/oapi-codegen
 
     - run: |
-        pip install tox
-
-    - attach_workspace:
-        at: /tmp/code/
-
-    # restore the saved cache after the first run or if `pom.xml` has changed
-    # REMEMBER: cache doesn't affect local builds
-    - restore_cache:
-        key: *key_cache
-
-    - run: |
-        cd /tmp/code/python-flask
-        python --version
-        python3 --version
-        tox
-
-    - save_cache: # saves the project dependencies
-        paths:
-          - /code/python-flask/.tox
-        key: *key_cache
-
-
-
+        make test-chi
 
 
 workflows:
@@ -73,7 +37,4 @@ workflows:
   continuous-deploy:
     jobs:
       - build
-      - test:
-          requires:
-          -  build
 

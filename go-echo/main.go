@@ -11,13 +11,10 @@ import (
 	"os"
 
 	"github.com/deepmap/oapi-codegen/pkg/middleware"
+	api "github.com/ioggstream/simple/api"
 	"github.com/labstack/echo/v4"
 	echomiddleware "github.com/labstack/echo/v4/middleware"
-    api "github.com/ioggstream/simple/api"
-
-
 )
-
 
 func main() {
 	var port = flag.Int("port", 8080, "Port for test HTTP server")
