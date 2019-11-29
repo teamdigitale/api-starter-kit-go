@@ -17,8 +17,8 @@ RUN go get -u github.com/deepmap/oapi-codegen/cmd/oapi-codegen
 
 ADD . /code
 WORKDIR /code
-RUN make go-build
-ENTRYPOINT ["make", "run"]
+RUN make build-chi
+ENTRYPOINT ["make", "run-chi"]
 
 
 

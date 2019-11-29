@@ -30,7 +30,7 @@ func Recovery(next http.Handler) http.Handler {
 				problem, err := json.Marshal(Problem{
 					Title:  http.StatusText(http.StatusInternalServerError),
 					Status: int32(http.StatusInternalServerError),
-					Detail: detail,
+					Detail: string(detail),
 				})
 				if err != nil {
 					fmt.Fprintf(os.Stderr, "Panic: %+v %s\n", rvr, err)
