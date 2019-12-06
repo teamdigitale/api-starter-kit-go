@@ -17,12 +17,12 @@ import (
 )
 
 func main() {
-	var port = flag.Int("port", 8080, "Port for test HTTP server")
+	var port = flag.String("addr", "127.0.0.1:8080", "Address for test HTTP server")
 	flag.Parse()
 
 	swagger, err := api.GetSwagger()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error loading swagger spec\n: %s", err)
+		fmt.Fprintf(os.Stderr, "Error loading swagger spec: %s\n", err.Error())
 		os.Exit(1)
 	}
 
@@ -50,5 +50,5 @@ func main() {
 	api.RegisterHandlers(e, petStore)
 
 	// And we serve HTTP until the world ends.
-	e.Logger.Fatal(e.Start(fmt.Sprintf("0.0.0.0:%d", *port)))
+	e.Logger.Fatal(e.Start(*addr)))
 }

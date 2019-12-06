@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 	//	"encoding/json"
-	"github.com/labstack/echo/v4"
+	echo "github.com/labstack/echo/v4"
 	echo_middleware "github.com/labstack/echo/v4/middleware"
 	"github.com/stretchr/testify/assert"
 	//	"github.com/stretchr/testify/require"

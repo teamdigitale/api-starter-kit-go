@@ -12,6 +12,12 @@ import (
 	"time"
 )
 
+type Problem struct {
+	Title string
+	Status int32
+	Detail string
+}
+
 type Filter = func(http.Handler) http.Handler
 
 var CORSFilterz = cors.New(cors.Options{
@@ -47,7 +53,7 @@ func Recovery(next http.Handler) http.Handler {
 	return http.HandlerFunc(fn)
 }
 
-// Handler creates http.Handler with routing matching OpenAPI spec.
+// HandlerCustom creates http.Handler with routing matching OpenAPI spec.
 func HandlerCustom(si ServerInterface) http.Handler {
 	r := chi.NewRouter()
 	r.Use(Recovery)
