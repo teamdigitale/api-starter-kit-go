@@ -17,7 +17,7 @@ import (
 )
 
 func main() {
-	var port = flag.String("addr", "127.0.0.1:8080", "Address for test HTTP server")
+	var addr = flag.String("addr", "127.0.0.1:8080", "Address for test HTTP server")
 	flag.Parse()
 
 	swagger, err := api.GetSwagger()
@@ -50,5 +50,5 @@ func main() {
 	api.RegisterHandlers(e, petStore)
 
 	// And we serve HTTP until the world ends.
-	e.Logger.Fatal(e.Start(*addr)))
+	e.Logger.Fatal(e.Start(*addr))
 }
