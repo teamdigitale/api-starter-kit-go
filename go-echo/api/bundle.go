@@ -19,7 +19,7 @@ import (
 // 	Ts time.Time
 // }
 
-// This function wraps sending of an error in the Error format, and
+// sendPetstoreError wraps sending of an error in the Error format, and
 // handling the failure to marshal that.
 func sendPetstoreError(ctx echo.Context, code int, message string) error {
 	err := ctx.JSON(code, message)
@@ -30,10 +30,13 @@ func sendPetstoreError(ctx echo.Context, code int, message string) error {
  * This structure contains all shared data for this app,
  * in our case it's a random number generator.
  */
+
+// MyApplication is the structure.
 type MyApplication struct {
 	r *rand.Rand
 }
 
+// CreateApplication returns a *MyApplication type.
 func CreateApplication() *MyApplication {
 	return &MyApplication{
 		r: rand.New(rand.NewSource(99)),
@@ -44,6 +47,7 @@ func CreateApplication() *MyApplication {
 // Implement the methods declared in the generated interface.
 //
 
+// GetEcho is a *MyApplication method for echo.
 func (app *MyApplication) GetEcho(ctx echo.Context) error {
 
 	var ts = time.Now()
@@ -53,6 +57,7 @@ func (app *MyApplication) GetEcho(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, result)
 }
 
+// GetStatus is a *MyApplication method to get the status.
 func (app *MyApplication) GetStatus(ctx echo.Context) error {
 
 	ctx.Response().Header().Set("Cache-Control", "no-store")
@@ -74,6 +79,7 @@ func (app *MyApplication) GetStatus(ctx echo.Context) error {
 	return ctx.JSON(http.StatusServiceUnavailable, result)
 }
 
+// CORSFilter manages the available CORS.
 func CORSFilter(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		c.Response().Header().Set("Access-Control-Allow-Origin", "*")
@@ -82,6 +88,7 @@ func CORSFilter(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
+// ProblemErrorHandler handles errors.
 func ProblemErrorHandler(err error, c echo.Context) {
 	c.Logger().Error(err)
 
