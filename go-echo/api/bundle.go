@@ -9,16 +9,6 @@ import (
 	echo "github.com/labstack/echo/v4"
 )
 
-// type Problem struct {
-// 	Title string
-// 	Status int32
-// 	Detail string
-// }
-
-// type Timestamps struct {
-// 	Ts time.Time
-// }
-
 // sendPetstoreError wraps sending of an error in the Error format, and
 // handling the failure to marshal that.
 func sendPetstoreError(ctx echo.Context, code int, message string) error {
