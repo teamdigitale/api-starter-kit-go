@@ -76,7 +76,7 @@ func HandlerCustom(si ServerInterface) http.Handler {
 	return r
 }
 
-// This function wraps sending of an error in the Error format, and
+// sendPetstoreError wraps sending of an error in the Error format, and
 // handling the failure to marshal that.
 func sendPetstoreError(w http.ResponseWriter, code int, message string) {
 	problem := Problem{
@@ -87,21 +87,24 @@ func sendPetstoreError(w http.ResponseWriter, code int, message string) {
 	json.NewEncoder(w).Encode(problem)
 }
 
-/**
+/*
  * This structure contains all shared data for this app,
  * in our case it's a random number generator.
  */
+
+// MyApplication contains all shared data for this app.
 type MyApplication struct {
 	r *rand.Rand
 }
 
+// CreateApplication creates a new application.
 func CreateApplication() *MyApplication {
 	return &MyApplication{
 		r: rand.New(rand.NewSource(99)),
 	}
 }
 
-// Define a cors handler.
+// CORSFilter defines a cors handler.
 func CORSFilter() *cors.Cors {
 	return cors.New(cors.Options{
 		AllowedOrigins: []string{"*"},
@@ -113,6 +116,7 @@ func CORSFilter() *cors.Cors {
 // Implement the methods declared in the generated interface.
 //
 
+// OptionsEcho is a *MyApplication method to set http headers.
 func (app *MyApplication) OptionsEcho(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -121,6 +125,7 @@ func (app *MyApplication) OptionsEcho(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
+// GetEcho is an a *MyApplication method that encodes result in json,
 func (app *MyApplication) GetEcho(w http.ResponseWriter, r *http.Request) {
 
 	var ts = time.Now()
@@ -131,6 +136,7 @@ func (app *MyApplication) GetEcho(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(result)
 }
 
+// GetStatus is an a *MyApplication method to rerieve the status.
 func (app *MyApplication) GetStatus(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Cache-Control", "no-store")
