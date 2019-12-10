@@ -12,12 +12,6 @@ import (
 	"time"
 )
 
-// type Problem struct {
-// 	Title string
-// 	Status int32
-// 	Detail string
-// }
-
 // Filter is a function that returns a http handler.
 type Filter = func(http.Handler) http.Handler
 
