@@ -18,8 +18,10 @@ import (
 // 	Detail string
 // }
 
+// Filter is a function that returns a http handler.
 type Filter = func(http.Handler) http.Handler
 
+// CORSFilterz manages the allowed http options.
 var CORSFilterz = cors.New(cors.Options{
 	AllowedOrigins:     []string{"*"},
 	AllowedMethods:     []string{"GET", "POST", "OPTIONS"},
@@ -28,6 +30,8 @@ var CORSFilterz = cors.New(cors.Options{
 	OptionsPassthrough: true, // process requests when defined
 }).Handler
 
+
+// Recovery recovers from panics.
 func Recovery(next http.Handler) http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
