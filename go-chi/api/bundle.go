@@ -12,11 +12,11 @@ import (
 	"time"
 )
 
-type Problem struct {
-	Title string
-	Status int32
-	Detail string
-}
+// type Problem struct {
+// 	Title string
+// 	Status int32
+// 	Detail string
+// }
 
 type Filter = func(http.Handler) http.Handler
 
