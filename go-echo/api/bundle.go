@@ -9,17 +9,15 @@ import (
 	echo "github.com/labstack/echo/v4"
 )
 
+// type Problem struct {
+// 	Title string
+// 	Status int32
+// 	Detail string
+// }
 
-
-type Problem struct {
-	Title string
-	Status int32
-	Detail string
-}
-
-type Timestamps struct {
-	Ts time.Time
-}
+// type Timestamps struct {
+// 	Ts time.Time
+// }
 
 // This function wraps sending of an error in the Error format, and
 // handling the failure to marshal that.
