@@ -47,6 +47,15 @@ func (app *MyApplication) GetEcho(ctx echo.Context) error {
 	return ctx.JSON(http.StatusOK, result)
 }
 
+// OptionsEcho is a *MyApplication method for echo.
+func (app *MyApplication) OptionsEcho(ctx echo.Context) error {
+
+	ctx.Response().Header().Set("Access-Control-Allow-Origin", "*")
+	ctx.Response().Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	return ctx.NoContent(204)
+}
+
+
 // GetStatus is a *MyApplication method to get the status.
 func (app *MyApplication) GetStatus(ctx echo.Context) error {
 

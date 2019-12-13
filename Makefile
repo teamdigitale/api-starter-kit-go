@@ -57,7 +57,7 @@ run-chi: build-chi
 	cd generated/github.com/ioggstream/simple && go run main.go
 	
 
-test: build-echo
+test-echo: build-echo
 	cd generated/github.com/ioggstream/simple && go test
 
 test-chi: build-chi
