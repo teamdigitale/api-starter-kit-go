@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 	"os"
 	"testing"
@@ -52,15 +51,16 @@ func TestMain(m *testing.M) {
 }
 
 func Test404(t *testing.T) {
-	var err error
 	result := testutil.NewRequest().Get("/missing").WithAcceptJson().Go(t, e)
 	assert.Equal(t, http.StatusNotFound, result.Code())
 
+	/* TODO: return  problem+json
 	var error api.Problem
 	var bytes []byte
 	err = result.UnmarshalBodyToObject(&error)
 	assert.NoError(t, err, "Cannot parse response", err)
 	fmt.Println("Error response: ", error, bytes)
+    */
 }
 
 func TestEcho(t *testing.T) {
