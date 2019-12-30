@@ -2,7 +2,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -10,7 +9,7 @@ import (
 )
 
 func main() {
-	var port = flag.Int("port", 8080, "Port for test HTTP server")
+	var addr = flag.String("addr", "127.0.0.1:8080", "Address for test HTTP server")
 	flag.Parse()
 
 	// Create an instance of our handler which satisfies the generated interface
@@ -21,7 +20,7 @@ func main() {
 
 	s := &http.Server{
 		Handler: h,
-		Addr:    fmt.Sprintf("0.0.0.0:%d", *port),
+		Addr:    *addr,
 	}
 
 	// And we serve HTTP until the world ends.
