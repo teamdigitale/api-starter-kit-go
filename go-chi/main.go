@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	api "github.com/ioggstream/simple/api"
+	api "github.com/teamdigitale/api-starter-kit-go/api"
 )
 
 func main() {

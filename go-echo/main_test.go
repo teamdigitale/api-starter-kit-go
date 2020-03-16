@@ -12,7 +12,7 @@ import (
 
 	"github.com/deepmap/oapi-codegen/pkg/middleware"
 	"github.com/deepmap/oapi-codegen/pkg/testutil"
-	api "github.com/ioggstream/simple/api"
+	api "github.com/teamdigitale/api-starter-kit-go/api"
 )
 
 type Error struct {

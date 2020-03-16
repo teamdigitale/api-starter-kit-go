@@ -11,7 +11,7 @@ import (
 	"os"
 
 	"github.com/deepmap/oapi-codegen/pkg/middleware"
-	api "github.com/ioggstream/simple/api"
+	api "github.com/teamdigitale/api-starter-kit-go/api"
 	"github.com/labstack/echo/v4"
 	echomiddleware "github.com/labstack/echo/v4/middleware"
 )
