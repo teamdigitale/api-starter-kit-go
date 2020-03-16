@@ -4,8 +4,8 @@
 YAML=$(shell find * -name \*yaml)
 YAMLSRC=$(shell find openapi -name \*yaml.src)
 YAMLGEN=$(patsubst %.yaml.src,%.yaml,$(YAMLSRC))
-ECHO_GEN=generated/github.com/ioggstream/simple/api/api-types.gen.go generated/github.com/ioggstream/simple/api/api-server.gen.go
-CHI_GEN=generated/github.com/ioggstream/simple/api/api-types.gen.go generated/github.com/ioggstream/simple/api/api-server-chi.gen.go
+ECHO_GEN=generated/github.com/teamdigitale/api-starter-kit-go/api/api-types.gen.go generated/github.com/teamdigitale/api-starter-kit-go/api/api-server.gen.go
+CHI_GEN=generated/github.com/teamdigitale/api-starter-kit-go/api/api-types.gen.go generated/github.com/teamdigitale/api-starter-kit-go/api/api-server-chi.gen.go
 
 yaml: $(YAMLGEN)
 
@@ -30,20 +30,20 @@ yamllint: $(YAML)
 
 
 prepare-echo:
-	mkdir -p  generated/github.com/ioggstream/simple
-	cp -rp go-echo/* generated/github.com/ioggstream/simple
+	mkdir -p  generated/github.com/teamdigitale/api-starter-kit-go
+	cp -rp go-echo/* generated/github.com/teamdigitale/api-starter-kit-go
 
 prepare-chi:
-	mkdir -p  generated/github.com/ioggstream/simple
-	cp -rp go-chi/* generated/github.com/ioggstream/simple
+	mkdir -p  generated/github.com/teamdigitale/api-starter-kit-go
+	cp -rp go-chi/* generated/github.com/teamdigitale/api-starter-kit-go
 
 echo-gen: prepare-echo $(ECHO_GEN)
 
 chi-gen: prepare-chi $(CHI_GEN)
 
 go-build:
-	cd generated/github.com/ioggstream/simple
-	go mod init github.com/ioggstream/simple
+	cd generated/github.com/teamdigitale/api-starter-kit-go
+	go mod init github.com/teamdigitale/api-starter-kit-go
 	go build
 
 build-chi: clean chi-gen go-build
@@ -51,17 +51,17 @@ build-chi: clean chi-gen go-build
 build-echo: clean echo-gen go-build
 
 run-echo: build-echo
-	cd generated/github.com/ioggstream/simple && go run main.go
+	cd generated/github.com/teamdigitale/api-starter-kit-go && go run main.go
 
 run-chi: build-chi
-	cd generated/github.com/ioggstream/simple && go run main.go
+	cd generated/github.com/teamdigitale/api-starter-kit-go && go run main.go
 	
 
 test-echo: build-echo
-	cd generated/github.com/ioggstream/simple && go test
+	cd generated/github.com/teamdigitale/api-starter-kit-go && go test
 
 test-chi: build-chi
-	cd generated/github.com/ioggstream/simple && go test
+	cd generated/github.com/teamdigitale/api-starter-kit-go && go test
 
 
 clean:

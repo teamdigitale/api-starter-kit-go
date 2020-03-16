@@ -1,4 +1,4 @@
-module github.com/ioggstream/simple
+module github.com/teamdigitale/api-starter-kit-go
 
 go 1.12
 

@@ -10,7 +10,7 @@ import (
 	"os"
 	"testing"
 
-	api "github.com/ioggstream/simple/api"
+	api "github.com/teamdigitale/api-starter-kit-go/api"
 )
 
 func DoJson(handler http.Handler, method string, url string, body interface{}) *httptest.ResponseRecorder {
